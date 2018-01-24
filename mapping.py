@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.cbook as cbook
 from math import degrees
-from scipy.misc import imread
+import imageio
 import numpy as np
 __location__ = os.path.realpath(
    os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -11,16 +11,21 @@ __location__ = os.path.realpath(
 fig, ax = plt.subplots()
 
 DATAFILE = cbook.get_sample_data(os.path.join(__location__, 'g152972.png'))
-IMAGE = imread(DATAFILE)
+IMAGE = imageio.imread(DATAFILE)
 plt.imshow(IMAGE, extent=[0, 1646, -411.5, 411.5])
 
 # Enter co-ordinates here
-POINTS = [[0, -300, 1.5708], [800, -225,3], [610, -250,43], [525, -180,22], [750, -200,43]]
+POINTS = [[0, -300, 0, 3],
+          [160, -290, 0, 3],
+          [429, -191, 1.45,3],
+          [525, -191, 1.48,3],
+          [508, 190, 0,3],
+          [707, 190, 0,3]]
 
 X_VALUE = []
 Y_VALUE = []
 PHI=[]
-
+SPEED=[]
 
 
 
@@ -33,6 +38,7 @@ for i in range(len(POINTS)):
    #converts radians to degrees
    PHI.append(degrees(POINTS[i][2]))
    POINT_NUMBER.append(i)
+   SPEED.append(POINTS[i][3])
 # Splits the point into an x and y component and adds it to 2 seperate lists
 # For each list inside the  POINTS list, divide them into thier x and y components
 # and add them to seperate lists. The POINT NUMBER list is the index of each point
@@ -45,6 +51,6 @@ ax.quiver(X_VALUE, Y_VALUE, U, V, angles=PHI,color='red')
 
 #plt.scatter(X_VALUE, Y_VALUE, color='red')
 for i, txt in enumerate(POINT_NUMBER):
-   plt.annotate(txt, (X_VALUE[i], Y_VALUE[i]), color='blue')
+   plt.annotate(("point %d \n, Speed %d"%( txt,SPEED[i])), (X_VALUE[i], Y_VALUE[i]), color='blue')
 plt.show()
 # This bit actually does the plotting
